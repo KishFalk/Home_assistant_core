@@ -31,7 +31,6 @@ from .const import (
     DOMAIN,
 )
 
-# Hej
 # Dedicated Home Assistant endpoint - do not change!
 URL = "https://aa015h6buqvih86i1.api.met.no/weatherapi/locationforecast/2.0/complete"
 
