@@ -18,6 +18,7 @@ from . import HomeAssistantTuyaData
 from .base import IntegerTypeData, TuyaEntity
 from .const import DEVICE_CLASS_UNITS, DOMAIN, TUYA_DISCOVERY_NEW, DPCode, DPType
 
+lightbulb_outline = "mdi:lightbulb-outline"
 # All descriptions can be found here. Mostly the Integer data types in the
 # default instructions set of each category end up being a number.
 # https://developer.tuya.com/en/docs/iot/standarddescription?id=K9i5ql6waswzq
@@ -189,7 +190,7 @@ NUMBERS: dict[str, tuple[NumberEntityDescription, ...]] = {
         NumberEntityDescription(
             key=DPCode.BRIGHTNESS_MIN_1,
             translation_key="minimum_brightness",
-            icon="mdi:lightbulb-outline",
+            icon=lightbulb_outline,
             entity_category=EntityCategory.CONFIG,
         ),
         NumberEntityDescription(
@@ -201,7 +202,7 @@ NUMBERS: dict[str, tuple[NumberEntityDescription, ...]] = {
         NumberEntityDescription(
             key=DPCode.BRIGHTNESS_MIN_2,
             translation_key="minimum_brightness_2",
-            icon="mdi:lightbulb-outline",
+            icon=lightbulb_outline,
             entity_category=EntityCategory.CONFIG,
         ),
         NumberEntityDescription(
@@ -213,7 +214,7 @@ NUMBERS: dict[str, tuple[NumberEntityDescription, ...]] = {
         NumberEntityDescription(
             key=DPCode.BRIGHTNESS_MIN_3,
             translation_key="minimum_brightness_3",
-            icon="mdi:lightbulb-outline",
+            icon=lightbulb_outline,
             entity_category=EntityCategory.CONFIG,
         ),
         NumberEntityDescription(
@@ -229,7 +230,7 @@ NUMBERS: dict[str, tuple[NumberEntityDescription, ...]] = {
         NumberEntityDescription(
             key=DPCode.BRIGHTNESS_MIN_1,
             translation_key="minimum_brightness",
-            icon="mdi:lightbulb-outline",
+            icon=lightbulb_outline,
             entity_category=EntityCategory.CONFIG,
         ),
         NumberEntityDescription(
@@ -241,7 +242,7 @@ NUMBERS: dict[str, tuple[NumberEntityDescription, ...]] = {
         NumberEntityDescription(
             key=DPCode.BRIGHTNESS_MIN_2,
             translation_key="minimum_brightness_2",
-            icon="mdi:lightbulb-outline",
+            icon=lightbulb_outline,
             entity_category=EntityCategory.CONFIG,
         ),
         NumberEntityDescription(
