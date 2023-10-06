@@ -37,6 +37,8 @@ from .const import (
     UnitOfMeasurement,
 )
 
+ticket_percent_outline = "mdi:ticket-percent-outline"
+
 
 @dataclass
 class TuyaSensorEntityDescription(SensorEntityDescription):
@@ -855,25 +857,25 @@ SENSORS: dict[str, tuple[TuyaSensorEntityDescription, ...]] = {
         TuyaSensorEntityDescription(
             key=DPCode.DUSTER_CLOTH,
             translation_key="duster_cloth_life",
-            icon="mdi:ticket-percent-outline",
+            icon=ticket_percent_outline,
             state_class=SensorStateClass.MEASUREMENT,
         ),
         TuyaSensorEntityDescription(
             key=DPCode.EDGE_BRUSH,
             translation_key="side_brush_life",
-            icon="mdi:ticket-percent-outline",
+            icon=ticket_percent_outline,
             state_class=SensorStateClass.MEASUREMENT,
         ),
         TuyaSensorEntityDescription(
             key=DPCode.FILTER_LIFE,
             translation_key="filter_life",
-            icon="mdi:ticket-percent-outline",
+            icon=ticket_percent_outline,
             state_class=SensorStateClass.MEASUREMENT,
         ),
         TuyaSensorEntityDescription(
             key=DPCode.ROLL_BRUSH,
             translation_key="rolling_brush_life",
-            icon="mdi:ticket-percent-outline",
+            icon=ticket_percent_outline,
             state_class=SensorStateClass.MEASUREMENT,
         ),
     ),
@@ -922,7 +924,7 @@ SENSORS: dict[str, tuple[TuyaSensorEntityDescription, ...]] = {
             key=DPCode.FILTER,
             translation_key="filter_utilization",
             entity_category=EntityCategory.DIAGNOSTIC,
-            icon="mdi:ticket-percent-outline",
+            icon=ticket_percent_outline,
         ),
         TuyaSensorEntityDescription(
             key=DPCode.PM25,
