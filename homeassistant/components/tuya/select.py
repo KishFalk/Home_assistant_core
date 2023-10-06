@@ -14,6 +14,8 @@ from . import HomeAssistantTuyaData
 from .base import TuyaEntity
 from .const import DOMAIN, TUYA_DISCOVERY_NEW, DPCode, DPType
 
+timer_cog_outline = "mdi:timer-cog-outline"
+
 # All descriptions can be found here. Mostly the Enum data types in the
 # default instructions set of each category end up being a select.
 # https://developer.tuya.com/en/docs/iot/standarddescription?id=K9i5ql6waswzq
@@ -233,13 +235,13 @@ SELECTS: dict[str, tuple[SelectEntityDescription, ...]] = {
         SelectEntityDescription(
             key=DPCode.COUNTDOWN,
             entity_category=EntityCategory.CONFIG,
-            icon="mdi:timer-cog-outline",
+            icon=timer_cog_outline,
             translation_key="countdown",
         ),
         SelectEntityDescription(
             key=DPCode.COUNTDOWN_SET,
             entity_category=EntityCategory.CONFIG,
-            icon="mdi:timer-cog-outline",
+            icon=timer_cog_outline,
             translation_key="countdown",
         ),
     ),
@@ -282,13 +284,13 @@ SELECTS: dict[str, tuple[SelectEntityDescription, ...]] = {
         SelectEntityDescription(
             key=DPCode.COUNTDOWN,
             entity_category=EntityCategory.CONFIG,
-            icon="mdi:timer-cog-outline",
+            icon=timer_cog_outline,
             translation_key="countdown",
         ),
         SelectEntityDescription(
             key=DPCode.COUNTDOWN_SET,
             entity_category=EntityCategory.CONFIG,
-            icon="mdi:timer-cog-outline",
+            icon=timer_cog_outline,
             translation_key="countdown",
         ),
     ),
@@ -298,13 +300,13 @@ SELECTS: dict[str, tuple[SelectEntityDescription, ...]] = {
         SelectEntityDescription(
             key=DPCode.COUNTDOWN,
             entity_category=EntityCategory.CONFIG,
-            icon="mdi:timer-cog-outline",
+            icon=timer_cog_outline,
             translation_key="countdown",
         ),
         SelectEntityDescription(
             key=DPCode.COUNTDOWN_SET,
             entity_category=EntityCategory.CONFIG,
-            icon="mdi:timer-cog-outline",
+            icon=timer_cog_outline,
             translation_key="countdown",
         ),
     ),
@@ -314,7 +316,7 @@ SELECTS: dict[str, tuple[SelectEntityDescription, ...]] = {
         SelectEntityDescription(
             key=DPCode.COUNTDOWN_SET,
             entity_category=EntityCategory.CONFIG,
-            icon="mdi:timer-cog-outline",
+            icon=timer_cog_outline,
             translation_key="countdown",
         ),
         SelectEntityDescription(
