@@ -49,7 +49,7 @@ async def async_setup_entry(
             device, (AsyncPlugableSwitchMeasuring, AsyncFullFlushSwitchMeasuring)
         ):
             entities.append(HomematicipSwitchMeasuring(hap, device))
-        elif isinstance(device, AsyncWiredSwitch8):
+        elif isinstance(device, AsyncOpenCollector8Module | AsyncWiredSwitch8):
             for channel in range(1, 9):
                 entities.append(HomematicipMultiSwitch(hap, device, channel=channel))
         elif isinstance(device, AsyncDinRailSwitch):
@@ -66,9 +66,6 @@ async def async_setup_entry(
             ),
         ):
             entities.append(HomematicipSwitch(hap, device))
-        elif isinstance(device, AsyncOpenCollector8Module):
-            for channel in range(1, 9):
-                entities.append(HomematicipMultiSwitch(hap, device, channel=channel))
         elif isinstance(device, AsyncHeatingSwitch2):
             for channel in range(1, 3):
                 entities.append(HomematicipMultiSwitch(hap, device, channel=channel))
