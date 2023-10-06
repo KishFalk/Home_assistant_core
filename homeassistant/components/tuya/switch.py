@@ -20,6 +20,8 @@ from . import HomeAssistantTuyaData
 from .base import TuyaEntity
 from .const import DOMAIN, TUYA_DISCOVERY_NEW, DPCode
 
+account_lock = "mdi:account-lock"
+
 # All descriptions can be found here. Mostly the Boolean data types in the
 # default instruction set of each category end up being a Switch.
 # https://developer.tuya.com/en/docs/iot/standarddescription?id=K9i5ql6waswzq
@@ -110,7 +112,7 @@ SWITCHES: dict[str, tuple[SwitchEntityDescription, ...]] = {
         SwitchEntityDescription(
             key=DPCode.CHILD_LOCK,
             translation_key="child_lock",
-            icon="mdi:account-lock",
+            icon=account_lock,
             entity_category=EntityCategory.CONFIG,
         ),
         SwitchEntityDescription(
@@ -177,7 +179,7 @@ SWITCHES: dict[str, tuple[SwitchEntityDescription, ...]] = {
         SwitchEntityDescription(
             key=DPCode.CHILD_LOCK,
             translation_key="child_lock",
-            icon="mdi:account-lock",
+            icon=account_lock,
             entity_category=EntityCategory.CONFIG,
         ),
         SwitchEntityDescription(
@@ -268,7 +270,7 @@ SWITCHES: dict[str, tuple[SwitchEntityDescription, ...]] = {
         SwitchEntityDescription(
             key=DPCode.LOCK,
             translation_key="child_lock",
-            icon="mdi:account-lock",
+            icon=account_lock,
             entity_category=EntityCategory.CONFIG,
         ),
         SwitchEntityDescription(
@@ -300,7 +302,7 @@ SWITCHES: dict[str, tuple[SwitchEntityDescription, ...]] = {
         SwitchEntityDescription(
             key=DPCode.LOCK,
             translation_key="child_lock",
-            icon="mdi:account-lock",
+            icon=account_lock,
             entity_category=EntityCategory.CONFIG,
         ),
     ),
@@ -326,7 +328,7 @@ SWITCHES: dict[str, tuple[SwitchEntityDescription, ...]] = {
         SwitchEntityDescription(
             key=DPCode.CHILD_LOCK,
             translation_key="child_lock",
-            icon="mdi:account-lock",
+            icon=account_lock,
             entity_category=EntityCategory.CONFIG,
         ),
         SwitchEntityDescription(
@@ -410,7 +412,7 @@ SWITCHES: dict[str, tuple[SwitchEntityDescription, ...]] = {
         SwitchEntityDescription(
             key=DPCode.LOCK,
             translation_key="child_lock",
-            icon="mdi:account-lock",
+            icon=account_lock,
             entity_category=EntityCategory.CONFIG,
         ),
     ),
@@ -543,7 +545,7 @@ SWITCHES: dict[str, tuple[SwitchEntityDescription, ...]] = {
         SwitchEntityDescription(
             key=DPCode.CHILD_LOCK,
             translation_key="child_lock",
-            icon="mdi:account-lock",
+            icon=account_lock,
             entity_category=EntityCategory.CONFIG,
         ),
     ),
@@ -563,7 +565,7 @@ SWITCHES: dict[str, tuple[SwitchEntityDescription, ...]] = {
         SwitchEntityDescription(
             key=DPCode.CHILD_LOCK,
             translation_key="child_lock",
-            icon="mdi:account-lock",
+            icon=account_lock,
             entity_category=EntityCategory.CONFIG,
         ),
         SwitchEntityDescription(
@@ -662,7 +664,7 @@ SWITCHES: dict[str, tuple[SwitchEntityDescription, ...]] = {
         SwitchEntityDescription(
             key=DPCode.CHILD_LOCK,
             translation_key="child_lock",
-            icon="mdi:account-lock",
+            icon=account_lock,
             entity_category=EntityCategory.CONFIG,
         ),
     ),
