@@ -92,9 +92,6 @@ def generate_binary_sensors(entry: ConfigEntry) -> Iterable[SIABinarySensor]:
         account = account_data[CONF_ACCOUNT]
         zones = entry.options[CONF_ACCOUNTS][account][CONF_ZONES]
 
-        yield SIABinarySensorConnectivity(
-            entry, account, SIA_HUB_ZONE, ENTITY_DESCRIPTION_CONNECTIVITY
-        )
         yield SIABinarySensor(entry, account, SIA_HUB_ZONE, ENTITY_DESCRIPTION_POWER)
         for zone in range(1, zones + 1):
             yield SIABinarySensor(entry, account, zone, ENTITY_DESCRIPTION_SMOKE)
