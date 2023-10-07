@@ -96,42 +96,58 @@ async def async_setup_entry(
     binary_sensors: list[AirzoneBinarySensor] = []
 
     for aidoo_id, aidoo_data in coordinator.data.get(AZD_AIDOOS, {}).items():
-        for description in AIDOO_BINARY_SENSOR_TYPES:
-            if description.key in aidoo_data:
-                binary_sensors.append(
-                    AirzoneAidooBinarySensor(
-                        coordinator,
-                        description,
-                        aidoo_id,
-                        aidoo_data,
-                    )
-                )
+        binary_sensors = add_sensor_data(
+            binary_sensors,
+            coordinator,
+            AIDOO_BINARY_SENSOR_TYPES,
+            AirzoneAidooBinarySensor,
+            aidoo_id,
+            aidoo_data,
+        )
 
     for system_id, system_data in coordinator.data.get(AZD_SYSTEMS, {}).items():
-        for description in SYSTEM_BINARY_SENSOR_TYPES:
-            if description.key in system_data:
-                binary_sensors.append(
-                    AirzoneSystemBinarySensor(
-                        coordinator,
-                        description,
-                        system_id,
-                        system_data,
-                    )
-                )
+        binary_sensors = add_sensor_data(
+            binary_sensors,
+            coordinator,
+            SYSTEM_BINARY_SENSOR_TYPES,
+            AirzoneSystemBinarySensor,
+            system_id,
+            system_data,
+        )
 
     for zone_id, zone_data in coordinator.data.get(AZD_ZONES, {}).items():
-        for description in ZONE_BINARY_SENSOR_TYPES:
-            if description.key in zone_data:
-                binary_sensors.append(
-                    AirzoneZoneBinarySensor(
-                        coordinator,
-                        description,
-                        zone_id,
-                        zone_data,
-                    )
-                )
+        binary_sensors = add_sensor_data(
+            binary_sensors,
+            coordinator,
+            ZONE_BINARY_SENSOR_TYPES,
+            AirzoneZoneBinarySensor,
+            zone_id,
+            zone_data,
+        )
 
     async_add_entities(binary_sensors)
+
+
+def add_sensor_data(
+    sensors: list,
+    coordinator: Any,
+    sensor_types: tuple,
+    type_of_sensor_to_append: Any,
+    zone_id: Any = None,
+    zone_data: Any = None,
+) -> list:
+    """Add sensor information to the sensors list."""
+    for description in sensor_types:
+        if description.key in zone_data:
+            sensors.append(
+                type_of_sensor_to_append(
+                    coordinator,
+                    description,
+                    zone_id,
+                    zone_data,
+                )
+            )
+    return sensors
 
 
 class AirzoneBinarySensor(AirzoneEntity, BinarySensorEntity):
