@@ -19,25 +19,11 @@ def async_load_history_from_system(
 
     Only loads if available on the current system.
     """
-    now_monotonic = monotonic_time_coarse()
     connectable_loaded_history: dict[str, BluetoothServiceInfoBleak] = {}
     all_loaded_history: dict[str, BluetoothServiceInfoBleak] = {}
 
     # Restore local adapters
-    for address, history in adapters.history.items():
-        if (
-            not (existing_all := connectable_loaded_history.get(address))
-            or history.advertisement_data.rssi > existing_all.rssi
-        ):
-            connectable_loaded_history[address] = all_loaded_history[
-                address
-            ] = BluetoothServiceInfoBleak.from_device_and_advertisement_data(
-                history.device,
-                history.advertisement_data,
-                history.source,
-                now_monotonic,
-                True,
-            )
+    restore_local_adapters(adapters, connectable_loaded_history, all_loaded_history)
 
     # Restore remote adapters
     for scanner in storage.scanners():
@@ -69,6 +55,29 @@ def async_load_history_from_system(
                 connectable_loaded_history[address] = service_info
 
     return all_loaded_history, connectable_loaded_history
+
+
+def restore_local_adapters(
+    adapters: BluetoothAdapters,
+    connectable_loaded_history: dict[str, BluetoothServiceInfoBleak],
+    all_loaded_history: dict[str, BluetoothServiceInfoBleak],
+) -> None:
+    """Restores the local adapters."""
+    now_monotonic = monotonic_time_coarse()
+    for address, history in adapters.history.items():
+        if (
+            not (existing_all := connectable_loaded_history.get(address))
+            or history.advertisement_data.rssi > existing_all.rssi
+        ):
+            connectable_loaded_history[address] = all_loaded_history[
+                address
+            ] = BluetoothServiceInfoBleak.from_device_and_advertisement_data(
+                history.device,
+                history.advertisement_data,
+                history.source,
+                now_monotonic,
+                True,
+            )
 
 
 async def async_reset_adapter(adapter: str | None, mac_address: str) -> bool | None:
