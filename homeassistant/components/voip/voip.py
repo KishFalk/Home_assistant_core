@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import asyncio
 from collections import deque
-from collections.abc import AsyncIterable, MutableSequence, Sequence
+from collections.abc import AsyncGenerator, MutableSequence, Sequence
 from functools import partial
 import logging
 from pathlib import Path
@@ -334,7 +334,7 @@ class PipelineRtpDatagramProtocol(RtpDatagramProtocol):
         self,
         segmenter: VoiceCommandSegmenter,
         chunk_buffer: Sequence[bytes],
-    ) -> AsyncIterable[bytes]:
+    ) -> AsyncGenerator[bytes, None]:
         """Yield audio chunks until voice command has finished."""
         # Buffered chunks first
         for buffered_chunk in chunk_buffer:
