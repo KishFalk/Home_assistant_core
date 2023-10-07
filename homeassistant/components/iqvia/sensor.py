@@ -232,9 +232,6 @@ class IndexSensor(IQVIAEntity, SensorEntity):
             if self.entity_description.key in (
                 TYPE_ALLERGY_TODAY,
                 TYPE_ALLERGY_TOMORROW,
-            ):
-                data = self.coordinator.data.get("Location")
-            elif self.entity_description.key in (
                 TYPE_ASTHMA_TODAY,
                 TYPE_ASTHMA_TOMORROW,
             ):
