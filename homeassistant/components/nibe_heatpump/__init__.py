@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import asyncio
 from collections import defaultdict
-from collections.abc import Callable, Iterable
+from collections.abc import Callable, Generator, Iterable
 from datetime import timedelta
 from typing import Any, Generic, TypeVar
 
@@ -270,7 +270,7 @@ class Coordinator(ContextCoordinator[dict[int, CoilData], int]):
     async def _async_update_data_internal(self) -> dict[int, CoilData]:
         result: dict[int, CoilData] = {}
 
-        def _get_coils() -> Iterable[Coil]:
+        def _get_coils() -> Generator[Coil, None, None]:
             for address in sorted(self.context_callbacks.keys()):
                 if seed := self.seed.pop(address, None):
                     self.logger.debug("Skipping seeded coil: %d", address)
