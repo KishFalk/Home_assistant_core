@@ -304,19 +304,19 @@ class Alert(Entity):
                     target,
                 )
 
-    async def async_turn_on(self, **kwargs: Any) -> None:
+    async def async_turn_on(self) -> None:
         """Async Unacknowledge alert."""
         LOGGER.debug("Reset Alert: %s", self._attr_name)
         self._ack = False
         self.async_write_ha_state()
 
-    async def async_turn_off(self, **kwargs: Any) -> None:
+    async def async_turn_off(self) -> None:
         """Async Acknowledge alert."""
         LOGGER.debug("Acknowledged Alert: %s", self._attr_name)
         self._ack = True
         self.async_write_ha_state()
 
-    async def async_toggle(self, **kwargs: Any) -> None:
+    async def async_toggle(self) -> None:
         """Async toggle alert."""
         if self._ack:
             return await self.async_turn_on()
