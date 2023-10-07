@@ -83,44 +83,60 @@ async def async_setup_entry(
 
     # Aidoos
     for aidoo_id, aidoo_data in coordinator.data.get(AZD_AIDOOS, {}).items():
-        for description in AIDOO_SENSOR_TYPES:
-            if description.key in aidoo_data:
-                sensors.append(
-                    AirzoneAidooSensor(
-                        coordinator,
-                        description,
-                        aidoo_id,
-                        aidoo_data,
-                    )
-                )
+        sensors = add_sensor_data(
+            sensors,
+            coordinator,
+            AIDOO_SENSOR_TYPES,
+            AirzoneAidooSensor,
+            aidoo_id,
+            aidoo_data,
+        )
 
     # WebServers
     for ws_id, ws_data in coordinator.data.get(AZD_WEBSERVERS, {}).items():
-        for description in WEBSERVER_SENSOR_TYPES:
-            if description.key in ws_data:
-                sensors.append(
-                    AirzoneWebServerSensor(
-                        coordinator,
-                        description,
-                        ws_id,
-                        ws_data,
-                    )
-                )
+        sensors = add_sensor_data(
+            sensors,
+            coordinator,
+            WEBSERVER_SENSOR_TYPES,
+            AirzoneWebServerSensor,
+            ws_id,
+            ws_data,
+        )
 
     # Zones
     for zone_id, zone_data in coordinator.data.get(AZD_ZONES, {}).items():
-        for description in ZONE_SENSOR_TYPES:
-            if description.key in zone_data:
-                sensors.append(
-                    AirzoneZoneSensor(
-                        coordinator,
-                        description,
-                        zone_id,
-                        zone_data,
-                    )
-                )
+        sensors = add_sensor_data(
+            sensors,
+            coordinator,
+            ZONE_SENSOR_TYPES,
+            AirzoneZoneSensor,
+            zone_id,
+            zone_data,
+        )
 
     async_add_entities(sensors)
+
+
+def add_sensor_data(
+    sensors: list,
+    coordinator: Any,
+    sensor_types: tuple,
+    type_of_sensor_to_append: Any,
+    zone_id: Any = None,
+    zone_data: Any = None,
+) -> list:
+    """Add sensor information to the sensors list."""
+    for description in sensor_types:
+        if description.key in zone_data:
+            sensors.append(
+                type_of_sensor_to_append(
+                    coordinator,
+                    description,
+                    zone_id,
+                    zone_data,
+                )
+            )
+    return sensors
 
 
 class AirzoneSensor(AirzoneEntity, SensorEntity):
