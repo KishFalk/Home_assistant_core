@@ -33,13 +33,10 @@ def validate_above_below(value):
     above = value.get(CONF_ABOVE)
     below = value.get(CONF_BELOW)
 
-    if above is None or below is None:
-        return value
+    value_not_none = above is not None and below is not None
+    value_is_string = isinstance(above, str) or isinstance(below, str)
 
-    if isinstance(above, str) or isinstance(below, str):
-        return value
-
-    if above > below:
+    if value_not_none and not value_is_string and above > below:
         raise vol.Invalid(
             (
                 f"A value can never be above {above} and below {below} at the same"
