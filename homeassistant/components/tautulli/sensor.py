@@ -29,6 +29,8 @@ from . import TautulliEntity
 from .const import ATTR_TOP_USER, DOMAIN
 from .coordinator import TautulliDataUpdateCoordinator
 
+plex = "mdi:plex"
+
 
 def get_top_stats(
     home_stats: PyTautulliApiHomeStats, activity: PyTautulliApiActivity, key: str
@@ -59,14 +61,14 @@ class TautulliSensorEntityDescription(
 
 SENSOR_TYPES: tuple[TautulliSensorEntityDescription, ...] = (
     TautulliSensorEntityDescription(
-        icon="mdi:plex",
+        icon=plex,
         key="watching_count",
         translation_key="watching_count",
         native_unit_of_measurement="Watching",
         value_fn=lambda home_stats, activity, _: cast(int, activity.stream_count),
     ),
     TautulliSensorEntityDescription(
-        icon="mdi:plex",
+        icon=plex,
         key="stream_count_direct_play",
         translation_key="stream_count_direct_play",
         entity_category=EntityCategory.DIAGNOSTIC,
@@ -77,7 +79,7 @@ SENSOR_TYPES: tuple[TautulliSensorEntityDescription, ...] = (
         ),
     ),
     TautulliSensorEntityDescription(
-        icon="mdi:plex",
+        icon=plex,
         key="stream_count_direct_stream",
         translation_key="stream_count_direct_stream",
         entity_category=EntityCategory.DIAGNOSTIC,
@@ -88,7 +90,7 @@ SENSOR_TYPES: tuple[TautulliSensorEntityDescription, ...] = (
         ),
     ),
     TautulliSensorEntityDescription(
-        icon="mdi:plex",
+        icon=plex,
         key="stream_count_transcode",
         translation_key="stream_count_transcode",
         entity_category=EntityCategory.DIAGNOSTIC,
@@ -167,7 +169,7 @@ class TautulliSessionSensorEntityDescription(
 
 SESSION_SENSOR_TYPES: tuple[TautulliSessionSensorEntityDescription, ...] = (
     TautulliSessionSensorEntityDescription(
-        icon="mdi:plex",
+        icon=plex,
         key="state",
         translation_key="state",
         value_fn=lambda session: cast(str, session.state),
@@ -194,7 +196,7 @@ SESSION_SENSOR_TYPES: tuple[TautulliSessionSensorEntityDescription, ...] = (
         value_fn=lambda session: cast(str, session.stream_video_resolution),
     ),
     TautulliSessionSensorEntityDescription(
-        icon="mdi:plex",
+        icon=plex,
         key="transcode_decision",
         translation_key="transcode_decision",
         entity_category=EntityCategory.DIAGNOSTIC,
