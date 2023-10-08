@@ -13,11 +13,11 @@ class ConfigEntryAuth(YoLinkAuthMgr):
         self,
         hass: HomeAssistant,
         websession: ClientSession,
-        oauth2Session: config_entry_oauth2_flow.OAuth2Session,
+        oauth2_session: config_entry_oauth2_flow.OAuth2Session,
     ) -> None:
         """Initialize yolink Auth."""
         self.hass = hass
-        self.oauth_session = oauth2Session
+        self.oauth_session = oauth2_session
         super().__init__(websession)
 
     def access_token(self) -> str:
