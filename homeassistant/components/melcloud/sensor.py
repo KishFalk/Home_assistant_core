@@ -22,6 +22,8 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from . import MelCloudDevice
 from .const import DOMAIN
 
+thermometer = "mdi:thermometer"
+
 
 @dataclass
 class MelcloudRequiredKeysMixin:
@@ -42,7 +44,7 @@ ATA_SENSORS: tuple[MelcloudSensorEntityDescription, ...] = (
     MelcloudSensorEntityDescription(
         key="room_temperature",
         translation_key="room_temperature",
-        icon="mdi:thermometer",
+        icon=thermometer,
         native_unit_of_measurement=UnitOfTemperature.CELSIUS,
         device_class=SensorDeviceClass.TEMPERATURE,
         state_class=SensorStateClass.MEASUREMENT,
@@ -73,7 +75,7 @@ ATW_SENSORS: tuple[MelcloudSensorEntityDescription, ...] = (
     MelcloudSensorEntityDescription(
         key="outside_temperature",
         translation_key="outside_temperature",
-        icon="mdi:thermometer",
+        icon=thermometer,
         native_unit_of_measurement=UnitOfTemperature.CELSIUS,
         device_class=SensorDeviceClass.TEMPERATURE,
         state_class=SensorStateClass.MEASUREMENT,
@@ -83,7 +85,7 @@ ATW_SENSORS: tuple[MelcloudSensorEntityDescription, ...] = (
     MelcloudSensorEntityDescription(
         key="tank_temperature",
         translation_key="tank_temperature",
-        icon="mdi:thermometer",
+        icon=thermometer,
         native_unit_of_measurement=UnitOfTemperature.CELSIUS,
         device_class=SensorDeviceClass.TEMPERATURE,
         state_class=SensorStateClass.MEASUREMENT,
@@ -105,7 +107,7 @@ ATW_ZONE_SENSORS: tuple[MelcloudSensorEntityDescription, ...] = (
     MelcloudSensorEntityDescription(
         key="room_temperature",
         translation_key="room_temperature",
-        icon="mdi:thermometer",
+        icon=thermometer,
         native_unit_of_measurement=UnitOfTemperature.CELSIUS,
         device_class=SensorDeviceClass.TEMPERATURE,
         state_class=SensorStateClass.MEASUREMENT,
@@ -115,7 +117,7 @@ ATW_ZONE_SENSORS: tuple[MelcloudSensorEntityDescription, ...] = (
     MelcloudSensorEntityDescription(
         key="flow_temperature",
         translation_key="flow_temperature",
-        icon="mdi:thermometer",
+        icon=thermometer,
         native_unit_of_measurement=UnitOfTemperature.CELSIUS,
         device_class=SensorDeviceClass.TEMPERATURE,
         state_class=SensorStateClass.MEASUREMENT,
@@ -125,7 +127,7 @@ ATW_ZONE_SENSORS: tuple[MelcloudSensorEntityDescription, ...] = (
     MelcloudSensorEntityDescription(
         key="return_temperature",
         translation_key="return_temperature",
-        icon="mdi:thermometer",
+        icon=thermometer,
         native_unit_of_measurement=UnitOfTemperature.CELSIUS,
         device_class=SensorDeviceClass.TEMPERATURE,
         state_class=SensorStateClass.MEASUREMENT,
