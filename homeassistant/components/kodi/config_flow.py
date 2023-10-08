@@ -32,6 +32,8 @@ from .const import (
 
 _LOGGER = logging.getLogger(__name__)
 
+unexpected_exception = "Unexpected exception"
+
 
 async def validate_http(hass: core.HomeAssistant, data):
     """Validate the user input allows us to connect over HTTP."""
@@ -133,7 +135,7 @@ class KodiConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         except CannotConnect:
             return self.async_abort(reason="cannot_connect")
         except Exception:  # pylint: disable=broad-except
-            _LOGGER.exception("Unexpected exception")
+            _LOGGER.exception(unexpected_exception)
             return self.async_abort(reason="unknown")
 
         return await self.async_step_discovery_confirm()
@@ -167,7 +169,7 @@ class KodiConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             except CannotConnect:
                 errors["base"] = "cannot_connect"
             except Exception:  # pylint: disable=broad-except
-                _LOGGER.exception("Unexpected exception")
+                _LOGGER.exception(unexpected_exception)
                 errors["base"] = "unknown"
             else:
                 return self._create_entry()
@@ -192,7 +194,7 @@ class KodiConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             except CannotConnect:
                 errors["base"] = "cannot_connect"
             except Exception:  # pylint: disable=broad-except
-                _LOGGER.exception("Unexpected exception")
+                _LOGGER.exception(unexpected_exception)
                 errors["base"] = "unknown"
             else:
                 return self._create_entry()
@@ -215,7 +217,7 @@ class KodiConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             except WSCannotConnect:
                 errors["base"] = "cannot_connect"
             except Exception:  # pylint: disable=broad-except
-                _LOGGER.exception("Unexpected exception")
+                _LOGGER.exception(unexpected_exception)
                 errors["base"] = "unknown"
             else:
                 return self._create_entry()
@@ -235,7 +237,7 @@ class KodiConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             _LOGGER.exception("Cannot connect to Kodi")
             reason = "cannot_connect"
         except Exception:  # pylint: disable=broad-except
-            _LOGGER.exception("Unexpected exception")
+            _LOGGER.exception(unexpected_exception)
             reason = "unknown"
         else:
             return self.async_create_entry(title=data[CONF_NAME], data=data)
