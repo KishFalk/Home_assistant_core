@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import asyncio
 from collections import defaultdict
-from collections.abc import Awaitable, Callable, Iterable
+from collections.abc import Awaitable, Callable, Generator
 from dataclasses import dataclass
 import functools
 import logging
@@ -81,7 +81,7 @@ class TriggerData:
     callback: TRIGGER_CALLBACK_TYPE
 
 
-def _get_language_variations(language: str) -> Iterable[str]:
+def _get_language_variations(language: str) -> Generator[str, None, None]:
     """Generate language codes with and without region."""
     yield language
 
