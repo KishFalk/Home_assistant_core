@@ -476,7 +476,8 @@ def _system_callback_handler(hass, config, src, *args):
     # Homegear error message
     elif src == "error":
         _LOGGER.error("Error: %s", args)
-        (interface_id, errorcode, message) = args
+        errorcode = args[1]
+        message = args[2]
         hass.bus.fire(EVENT_ERROR, {ATTR_ERRORCODE: errorcode, ATTR_MESSAGE: message})
 
 
