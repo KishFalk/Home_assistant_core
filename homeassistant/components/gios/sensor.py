@@ -41,6 +41,8 @@ from .const import (
 
 _LOGGER = logging.getLogger(__name__)
 
+molecule = "mdi:molecule"
+
 
 @dataclass
 class GiosSensorRequiredKeysMixin:
@@ -69,7 +71,7 @@ SENSOR_TYPES: tuple[GiosSensorEntityDescription, ...] = (
         key=ATTR_C6H6,
         value=lambda sensors: sensors.c6h6.value if sensors.c6h6 else None,
         suggested_display_precision=0,
-        icon="mdi:molecule",
+        icon=molecule,
         native_unit_of_measurement=CONCENTRATION_MICROGRAMS_PER_CUBIC_METER,
         state_class=SensorStateClass.MEASUREMENT,
         translation_key="c6h6",
@@ -78,7 +80,7 @@ SENSOR_TYPES: tuple[GiosSensorEntityDescription, ...] = (
         key=ATTR_CO,
         value=lambda sensors: sensors.co.value if sensors.co else None,
         suggested_display_precision=0,
-        icon="mdi:molecule",
+        icon=molecule,
         native_unit_of_measurement=CONCENTRATION_MICROGRAMS_PER_CUBIC_METER,
         state_class=SensorStateClass.MEASUREMENT,
         translation_key="co",
@@ -95,7 +97,7 @@ SENSOR_TYPES: tuple[GiosSensorEntityDescription, ...] = (
         key=ATTR_NO2,
         subkey="index",
         value=lambda sensors: sensors.no2.index if sensors.no2 else None,
-        icon="mdi:molecule",
+        icon=molecule,
         device_class=SensorDeviceClass.ENUM,
         options=["very_bad", "bad", "sufficient", "moderate", "good", "very_good"],
         translation_key="no2_index",
@@ -112,7 +114,7 @@ SENSOR_TYPES: tuple[GiosSensorEntityDescription, ...] = (
         key=ATTR_O3,
         subkey="index",
         value=lambda sensors: sensors.o3.index if sensors.o3 else None,
-        icon="mdi:molecule",
+        icon=molecule,
         device_class=SensorDeviceClass.ENUM,
         options=["very_bad", "bad", "sufficient", "moderate", "good", "very_good"],
         translation_key="o3_index",
@@ -129,7 +131,7 @@ SENSOR_TYPES: tuple[GiosSensorEntityDescription, ...] = (
         key=ATTR_PM10,
         subkey="index",
         value=lambda sensors: sensors.pm10.index if sensors.pm10 else None,
-        icon="mdi:molecule",
+        icon=molecule,
         device_class=SensorDeviceClass.ENUM,
         options=["very_bad", "bad", "sufficient", "moderate", "good", "very_good"],
         translation_key="pm10_index",
@@ -146,7 +148,7 @@ SENSOR_TYPES: tuple[GiosSensorEntityDescription, ...] = (
         key=ATTR_PM25,
         subkey="index",
         value=lambda sensors: sensors.pm25.index if sensors.pm25 else None,
-        icon="mdi:molecule",
+        icon=molecule,
         device_class=SensorDeviceClass.ENUM,
         options=["very_bad", "bad", "sufficient", "moderate", "good", "very_good"],
         translation_key="pm25_index",
@@ -163,7 +165,7 @@ SENSOR_TYPES: tuple[GiosSensorEntityDescription, ...] = (
         key=ATTR_SO2,
         subkey="index",
         value=lambda sensors: sensors.so2.index if sensors.so2 else None,
-        icon="mdi:molecule",
+        icon=molecule,
         device_class=SensorDeviceClass.ENUM,
         options=["very_bad", "bad", "sufficient", "moderate", "good", "very_good"],
         translation_key="so2_index",
