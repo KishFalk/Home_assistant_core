@@ -24,6 +24,8 @@ from .coordinator import TrainData, TVDataUpdateCoordinator
 
 ATTR_PRODUCT_FILTER = "product_filter"
 
+clock = "mdi:clock"
+
 
 @dataclass
 class TrafikverketRequiredKeysMixin:
@@ -43,14 +45,14 @@ SENSOR_TYPES: tuple[TrafikverketSensorEntityDescription, ...] = (
     TrafikverketSensorEntityDescription(
         key="departure_time",
         translation_key="departure_time",
-        icon="mdi:clock",
+        icon=clock,
         device_class=SensorDeviceClass.TIMESTAMP,
         value_fn=lambda data: data.departure_time,
     ),
     TrafikverketSensorEntityDescription(
         key="departure_state",
         translation_key="departure_state",
-        icon="mdi:clock",
+        icon=clock,
         value_fn=lambda data: data.departure_state,
         device_class=SensorDeviceClass.ENUM,
         options=["on_time", "delayed", "canceled"],
@@ -64,7 +66,7 @@ SENSOR_TYPES: tuple[TrafikverketSensorEntityDescription, ...] = (
     TrafikverketSensorEntityDescription(
         key="delayed_time",
         translation_key="delayed_time",
-        icon="mdi:clock",
+        icon=clock,
         device_class=SensorDeviceClass.DURATION,
         native_unit_of_measurement=UnitOfTime.SECONDS,
         value_fn=lambda data: data.delayed_time,
@@ -72,7 +74,7 @@ SENSOR_TYPES: tuple[TrafikverketSensorEntityDescription, ...] = (
     TrafikverketSensorEntityDescription(
         key="planned_time",
         translation_key="planned_time",
-        icon="mdi:clock",
+        icon=clock,
         device_class=SensorDeviceClass.TIMESTAMP,
         value_fn=lambda data: data.planned_time,
         entity_registry_enabled_default=False,
@@ -80,7 +82,7 @@ SENSOR_TYPES: tuple[TrafikverketSensorEntityDescription, ...] = (
     TrafikverketSensorEntityDescription(
         key="estimated_time",
         translation_key="estimated_time",
-        icon="mdi:clock",
+        icon=clock,
         device_class=SensorDeviceClass.TIMESTAMP,
         value_fn=lambda data: data.estimated_time,
         entity_registry_enabled_default=False,
@@ -88,7 +90,7 @@ SENSOR_TYPES: tuple[TrafikverketSensorEntityDescription, ...] = (
     TrafikverketSensorEntityDescription(
         key="actual_time",
         translation_key="actual_time",
-        icon="mdi:clock",
+        icon=clock,
         device_class=SensorDeviceClass.TIMESTAMP,
         value_fn=lambda data: data.actual_time,
         entity_registry_enabled_default=False,
