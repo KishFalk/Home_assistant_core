@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import asyncio
-from collections.abc import Callable, Iterable
+from collections.abc import Callable, Generator, Iterable
 from datetime import datetime, timedelta
 import itertools
 import logging
@@ -285,7 +285,9 @@ class BluetoothManager:
         ]
 
     @hass_callback
-    def _async_all_discovered_addresses(self, connectable: bool) -> Iterable[str]:
+    def _async_all_discovered_addresses(
+        self, connectable: bool
+    ) -> Generator[str, None, None]:
         """Return all of discovered addresses.
 
         Include addresses from all the scanners including duplicates.
