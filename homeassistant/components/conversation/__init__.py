@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import asyncio
-from collections.abc import Iterable
+from collections.abc import Generator, Iterable
 from dataclasses import dataclass
 import logging
 import re
@@ -350,7 +350,7 @@ async def websocket_hass_agent_debug(
 def _get_debug_targets(
     hass: HomeAssistant,
     result: RecognizeResult,
-) -> Iterable[tuple[core.State, bool]]:
+) -> Generator[tuple[core.State, bool], None, None]:
     """Yield state/is_matched pairs for a hassil recognition."""
     entities = result.entities
 
