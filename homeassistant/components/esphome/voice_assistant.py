@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import asyncio
-from collections.abc import AsyncIterable, Callable
+from collections.abc import AsyncGenerator, Callable
 import logging
 import socket
 from typing import cast
@@ -140,7 +140,7 @@ class VoiceAssistantUDPServer(asyncio.DatagramProtocol):
         if self.transport is not None:
             self.transport.close()
 
-    async def _iterate_packets(self) -> AsyncIterable[bytes]:
+    async def _iterate_packets(self) -> AsyncGenerator[bytes, None]:
         """Iterate over incoming packets."""
         if not self.started or self.stopped:
             raise RuntimeError("Not running")
