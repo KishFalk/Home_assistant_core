@@ -284,16 +284,11 @@ class ImapDataUpdateCoordinator(DataUpdateCoordinator[int | None]):
         if not (count := len(message_ids := lines[0].split())):
             self._last_message_id = None
             return 0
-        last_message_id = (
-            str(message_ids[-1:][0], encoding=self.config_entry.data[CONF_CHARSET])
-            if count
-            else None
+        last_message_id = str(
+            message_ids[-1:][0], encoding=self.config_entry.data[CONF_CHARSET]
         )
-        if (
-            count
-            and last_message_id is not None
-            and self._last_message_id != last_message_id
-        ):
+
+        if last_message_id is not None and self._last_message_id != last_message_id:
             self._last_message_id = last_message_id
             await self._async_process_event(last_message_id)
 
