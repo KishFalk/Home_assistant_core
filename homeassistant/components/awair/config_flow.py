@@ -178,7 +178,7 @@ class AwairFlowHandler(ConfigFlow, domain=DOMAIN):
         if not discovered or (user_input and user_input.get(CONF_DEVICE) == "manual"):
             data_schema = vol.Schema({vol.Required(CONF_HOST): str})
 
-        elif discovered:
+        else:
             discovered["manual"] = "Manual"
             data_schema = vol.Schema({vol.Required(CONF_DEVICE): vol.In(discovered)})
 
