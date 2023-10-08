@@ -34,6 +34,27 @@ PREFERRED_LIBTYPE_ORDER = (
 _LOGGER = logging.getLogger(__name__)
 
 
+def default_libtype(search_query: dict) -> str | None:
+    """Return to a sane libtype if not explicitly provided."""
+    for preferred_libtype in PREFERRED_LIBTYPE_ORDER:
+        if any(key.startswith(preferred_libtype) for key in search_query):
+            libtype = preferred_libtype
+            return libtype
+    return None
+
+
+def find_exact_match(results: list, search_query: dict) -> PlexObject:
+    """Return one search match."""
+    if title := search_query.get("title") or search_query.get("movie.title"):
+        exact_matches = [x for x in results if x.title.lower() == title.lower()]
+        if len(exact_matches) == 1:
+            return exact_matches[0]
+    raise MediaNotFound(
+        "Multiple matches, make content_id more specific or use `allow_multiple`:"
+        f" {results}"
+    )
+
+
 def search_media(
     media_type: str,
     library_section: LibrarySection,
@@ -61,11 +82,7 @@ def search_media(
     search_query.update(**kwargs)
 
     if not libtype:
-        # Default to a sane libtype if not explicitly provided
-        for preferred_libtype in PREFERRED_LIBTYPE_ORDER:
-            if any(key.startswith(preferred_libtype) for key in search_query):
-                libtype = preferred_libtype
-                break
+        libtype = default_libtype(search_query)
 
     search_query.update(libtype=libtype)
     _LOGGER.debug("Processed search query: %s", search_query)
@@ -83,14 +100,6 @@ def search_media(
     if len(results) > 1:
         if allow_multiple:
             return results
-
-        if title := search_query.get("title") or search_query.get("movie.title"):
-            exact_matches = [x for x in results if x.title.lower() == title.lower()]
-            if len(exact_matches) == 1:
-                return exact_matches[0]
-        raise MediaNotFound(
-            "Multiple matches, make content_id more specific or use `allow_multiple`:"
-            f" {results}"
-        )
+        return find_exact_match(results, search_query)
 
     return results[0]
