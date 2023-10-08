@@ -22,7 +22,7 @@ def async_info(hass: HomeAssistant) -> list[HardwareInfo]:
     board: str | None
     if (board := os_info.get("board")) is None:
         raise HomeAssistantError
-    if not board == "yellow":
+    if board != "yellow":
         raise HomeAssistantError
 
     config_entries = [
