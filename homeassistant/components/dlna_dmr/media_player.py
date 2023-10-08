@@ -6,7 +6,7 @@ from collections.abc import Awaitable, Callable, Coroutine, Sequence
 import contextlib
 from datetime import datetime, timedelta
 import functools
-from typing import Any, Concatenate, ParamSpec, TypeVar
+from typing import Any, Concatenate, Optional, ParamSpec, TypeVar
 
 from async_upnp_client.client import UpnpService, UpnpStateVariable
 from async_upnp_client.const import NotificationSubType
@@ -197,6 +197,67 @@ class DlnaDmrEntity(MediaPlayerEntity):
         """Handle removal."""
         await self._device_disconnect()
 
+    # Helper function for async_ssdp_callback
+    async def handle_extracting_bootid(
+        self, info: ssdp.SsdpServiceInfo
+    ) -> Optional[int]:
+        """Extract boot id from the SSDP headers."""
+        try:
+            bootid_str = info.ssdp_headers[ssdp.ATTR_SSDP_BOOTID]
+            return int(bootid_str, 10)
+        except (KeyError, ValueError):
+            return None
+
+    # Helper function for async_ssdp_callback
+    async def handle_update(
+        self, info: ssdp.SsdpServiceInfo, bootid: Optional[int]
+    ) -> None:
+        """Handle update notification from SSDP."""
+        # This is an announcement that bootid is about to change
+        if self._bootid == bootid:
+            # Store the new value (because our old value matches) so that we
+            # can ignore subsequent ssdp:alive messages
+            with contextlib.suppress(KeyError, ValueError):
+                next_bootid_str = info.ssdp_headers[ssdp.ATTR_SSDP_NEXTBOOTID]
+                self._bootid = int(next_bootid_str, 10)
+
+    # Helper function for async_ssdp_callback
+    async def handle_bootid_update_disconnect(self, bootid: Optional[int]) -> None:
+        """Handle change in the boot id and disconnect if necessary."""
+        if self._bootid != bootid:
+            # Device has rebooted
+            # Maybe connection will succeed now
+            self._ssdp_connect_failed = False
+            if self._device:
+                # Drop existing connection and maybe reconnect
+                await self._device_disconnect()
+        self._bootid = bootid
+
+    # Helper function for async_ssdp_callback
+    async def handle_BYEBYE(self) -> None:
+        """Handle BYEBYE notification from SSDP."""
+        # Device is going away
+        if self._device:
+            # Disconnect from gone device
+            await self._device_disconnect()
+        # Maybe the next alive message will result in a successful connection
+        self._ssdp_connect_failed = False
+
+    # Helper function for async_ssdp_callback
+    async def handle_alive(self, info: ssdp.SsdpServiceInfo) -> None:
+        """Handle ALIVE notification from SSDP."""
+        assert info.ssdp_location
+        location = info.ssdp_location
+        try:
+            await self._device_connect(location)
+        except UpnpError as err:
+            self._ssdp_connect_failed = True
+            _LOGGER.warning(
+                "Failed connecting to recently alive device at %s: %r",
+                location,
+                err,
+            )
+
     async def async_ssdp_callback(
         self, info: ssdp.SsdpServiceInfo, change: ssdp.SsdpChange
     ) -> None:
@@ -207,57 +268,23 @@ class DlnaDmrEntity(MediaPlayerEntity):
             info.ssdp_usn,
             info.ssdp_location,
         )
-
-        try:
-            bootid_str = info.ssdp_headers[ssdp.ATTR_SSDP_BOOTID]
-            bootid: int | None = int(bootid_str, 10)
-        except (KeyError, ValueError):
-            bootid = None
+        bootid = await self.handle_extracting_bootid(info)
 
         if change == ssdp.SsdpChange.UPDATE:
-            # This is an announcement that bootid is about to change
-            if self._bootid is not None and self._bootid == bootid:
-                # Store the new value (because our old value matches) so that we
-                # can ignore subsequent ssdp:alive messages
-                with contextlib.suppress(KeyError, ValueError):
-                    next_bootid_str = info.ssdp_headers[ssdp.ATTR_SSDP_NEXTBOOTID]
-                    self._bootid = int(next_bootid_str, 10)
-            # Nothing left to do until ssdp:alive comes through
+            await self.handle_update(info, bootid)
             return
 
-        if self._bootid is not None and self._bootid != bootid:
-            # Device has rebooted
-            # Maybe connection will succeed now
-            self._ssdp_connect_failed = False
-            if self._device:
-                # Drop existing connection and maybe reconnect
-                await self._device_disconnect()
-        self._bootid = bootid
+        await self.handle_bootid_update_disconnect(bootid)
 
         if change == ssdp.SsdpChange.BYEBYE:
-            # Device is going away
-            if self._device:
-                # Disconnect from gone device
-                await self._device_disconnect()
-            # Maybe the next alive message will result in a successful connection
-            self._ssdp_connect_failed = False
+            await self.handle_BYEBYE()
 
         if (
             change == ssdp.SsdpChange.ALIVE
             and not self._device
             and not self._ssdp_connect_failed
         ):
-            assert info.ssdp_location
-            location = info.ssdp_location
-            try:
-                await self._device_connect(location)
-            except UpnpError as err:
-                self._ssdp_connect_failed = True
-                _LOGGER.warning(
-                    "Failed connecting to recently alive device at %s: %r",
-                    location,
-                    err,
-                )
+            await self.handle_alive(info)
 
         # Device could have been de/re-connected, state probably changed
         self.async_write_ha_state()
