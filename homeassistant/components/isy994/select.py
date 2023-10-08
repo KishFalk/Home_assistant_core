@@ -190,7 +190,7 @@ class ISYBacklightSelectEntity(ISYAuxControlEntity, SelectEntity, RestoreEntity)
     @callback
     def async_on_memory_write(self, event: NodeChangedEvent, key: str) -> None:
         """Handle a memory write event from the ISY Node."""
-        if not (BACKLIGHT_MEMORY_FILTER.items() <= event.event_info.items()):
+        if BACKLIGHT_MEMORY_FILTER.items() > event.event_info.items():
             return  # This was not a backlight event
         option = BACKLIGHT_INDEX[event.event_info["value"]]
         if option == self._attr_current_option:
