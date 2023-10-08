@@ -138,7 +138,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         )
 
     async def _test_connection(self, serial: str, ip_address: str) -> str:
-        if not len(serial) == 12 or not serial.isdigit():
+        if len(serial) != 12 or not serial.isdigit():
             raise NoboHubConnectError("invalid_serial")
         try:
             socket.inet_aton(ip_address)
