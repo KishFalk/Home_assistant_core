@@ -49,6 +49,8 @@ UPDATE_INTERVAL = 30
 
 _LOGGER = logging.getLogger(__name__)
 
+ev_station = "mdi:ev-station"
+
 
 @dataclass
 class WallboxSensorEntityDescription(SensorEntityDescription):
@@ -108,7 +110,7 @@ SENSOR_TYPES: dict[str, WallboxSensorEntityDescription] = {
     ),
     CHARGER_COST_KEY: WallboxSensorEntityDescription(
         key=CHARGER_COST_KEY,
-        icon="mdi:ev-station",
+        icon=ev_station,
         name="Cost",
         state_class=SensorStateClass.TOTAL_INCREASING,
     ),
@@ -121,26 +123,26 @@ SENSOR_TYPES: dict[str, WallboxSensorEntityDescription] = {
     ),
     CHARGER_CURRENT_MODE_KEY: WallboxSensorEntityDescription(
         key=CHARGER_CURRENT_MODE_KEY,
-        icon="mdi:ev-station",
+        icon=ev_station,
         name="Current Mode",
     ),
     CHARGER_DEPOT_PRICE_KEY: WallboxSensorEntityDescription(
         key=CHARGER_DEPOT_PRICE_KEY,
-        icon="mdi:ev-station",
+        icon=ev_station,
         name="Depot Price",
         precision=2,
         state_class=SensorStateClass.MEASUREMENT,
     ),
     CHARGER_ENERGY_PRICE_KEY: WallboxSensorEntityDescription(
         key=CHARGER_ENERGY_PRICE_KEY,
-        icon="mdi:ev-station",
+        icon=ev_station,
         name="Energy Price",
         precision=2,
         state_class=SensorStateClass.MEASUREMENT,
     ),
     CHARGER_STATUS_DESCRIPTION_KEY: WallboxSensorEntityDescription(
         key=CHARGER_STATUS_DESCRIPTION_KEY,
-        icon="mdi:ev-station",
+        icon=ev_station,
         name="Status Description",
     ),
     CHARGER_MAX_CHARGING_CURRENT_KEY: WallboxSensorEntityDescription(
