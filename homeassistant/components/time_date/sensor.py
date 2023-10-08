@@ -48,7 +48,7 @@ async def async_setup_platform(
     """Set up the Time and Date sensor."""
     if hass.config.time_zone is None:
         _LOGGER.error("Timezone is not set in Home Assistant configuration")
-        return False
+        return None
 
     async_add_entities(
         [TimeDateSensor(hass, variable) for variable in config[CONF_DISPLAY_OPTIONS]]
