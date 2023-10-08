@@ -573,7 +573,7 @@ class PipelineRun:
         wake_word_vad: VoiceActivityTimeout | None,
         sample_rate: int = 16000,
         sample_width: int = 2,
-    ) -> AsyncIterable[tuple[bytes, int]]:
+    ) -> AsyncGenerator[tuple[bytes, int], None]:
         """Yield audio chunks with timestamps (milliseconds since start of stream).
 
         Adds audio to a ring buffer that will be forwarded to speech-to-text after
