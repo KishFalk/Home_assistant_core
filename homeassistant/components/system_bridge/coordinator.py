@@ -62,7 +62,7 @@ class SystemBridgeDataUpdateCoordinator(
     def __init__(
         self,
         hass: HomeAssistant,
-        LOGGER: logging.Logger,
+        logger: logging.Logger,
         *,
         entry: ConfigEntry,
     ) -> None:
@@ -78,7 +78,7 @@ class SystemBridgeDataUpdateCoordinator(
         )
 
         super().__init__(
-            hass, LOGGER, name=DOMAIN, update_interval=timedelta(seconds=30)
+            hass, logger, name=DOMAIN, update_interval=timedelta(seconds=30)
         )
 
     @property
