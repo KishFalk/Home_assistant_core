@@ -24,6 +24,8 @@ from . import DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
 
+calender_clock = "mdi:calendar-clock"
+
 INFO_SENSORS = (
     SensorEntityDescription(
         key="date",
@@ -61,47 +63,47 @@ TIME_SENSORS = (
     SensorEntityDescription(
         key="talit",
         name="Talit and Tefillin",
-        icon="mdi:calendar-clock",
+        icon=calender_clock,
     ),
     SensorEntityDescription(
         key="sunrise",
         name="Hanetz Hachama",
-        icon="mdi:calendar-clock",
+        icon=calender_clock,
     ),
     SensorEntityDescription(
         key="gra_end_shma",
         name='Latest time for Shma Gr"a',
-        icon="mdi:calendar-clock",
+        icon=calender_clock,
     ),
     SensorEntityDescription(
         key="mga_end_shma",
         name='Latest time for Shma MG"A',
-        icon="mdi:calendar-clock",
+        icon=calender_clock,
     ),
     SensorEntityDescription(
         key="gra_end_tfila",
         name='Latest time for Tefilla Gr"a',
-        icon="mdi:calendar-clock",
+        icon=calender_clock,
     ),
     SensorEntityDescription(
         key="mga_end_tfila",
         name='Latest time for Tefilla MG"A',
-        icon="mdi:calendar-clock",
+        icon=calender_clock,
     ),
     SensorEntityDescription(
         key="midday",
         name="Chatzot Hayom",
-        icon="mdi:calendar-clock",
+        icon=calender_clock,
     ),
     SensorEntityDescription(
         key="big_mincha",
         name="Mincha Gedola",
-        icon="mdi:calendar-clock",
+        icon=calender_clock,
     ),
     SensorEntityDescription(
         key="small_mincha",
         name="Mincha Ketana",
-        icon="mdi:calendar-clock",
+        icon=calender_clock,
     ),
     SensorEntityDescription(
         key="plag_mincha",
