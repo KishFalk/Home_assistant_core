@@ -90,10 +90,7 @@ class SaunaClimate(ToloSaunaCoordinatorEntity, ClimateEntity):
         """Get current HVAC mode."""
         if self.coordinator.data.status.power_on:
             return HVACMode.HEAT
-        if (
-            not self.coordinator.data.status.power_on
-            and self.coordinator.data.status.fan_on
-        ):
+        if self.coordinator.data.status.fan_on:
             return HVACMode.DRY
         return HVACMode.OFF
 
