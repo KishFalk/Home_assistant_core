@@ -280,7 +280,7 @@ def chunk_samples(
     if (len(leftover_chunk_buffer) + len(samples)) < bytes_per_chunk:
         # Extend leftover chunk, but not enough samples to complete it
         leftover_chunk_buffer.append(samples)
-        return
+        return Iterable[bytes]
 
     next_chunk_idx = 0
 
