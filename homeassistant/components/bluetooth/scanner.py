@@ -209,6 +209,47 @@ class HaScanner(BaseHaScanner):
         async with self._start_stop_lock:
             await self._async_start()
 
+    def _handel_invalid_message_error(self, ex: Exception) -> None:
+        _LOGGER.debug(
+            "%s: Invalid DBus message received: %s",
+            self.name,
+            ex,
+            exc_info=True,
+        )
+        raise ScannerStartError(
+            f"{self.name}: Invalid DBus message received: {ex}; "
+            "try restarting `dbus`"
+        ) from ex
+
+    def _broken_pipe_error(self, ex: Exception) -> None:
+        _LOGGER.debug("%s: DBus connection broken: %s", self.name, ex, exc_info=True)
+        if is_docker_env():
+            raise ScannerStartError(
+                f"{self.name}: DBus connection broken: {ex}; try restarting "
+                "`bluetooth`, `dbus`, and finally the docker container"
+            ) from ex
+        raise ScannerStartError(
+            f"{self.name}: DBus connection broken: {ex}; try restarting "
+            "`bluetooth` and `dbus`"
+        ) from ex
+
+    def _file_not_found_error(self, ex: Exception) -> None:
+        _LOGGER.debug(
+            "%s: FileNotFoundError while starting bluetooth: %s",
+            self.name,
+            ex,
+            exc_info=True,
+        )
+        if is_docker_env():
+            raise ScannerStartError(
+                f"{self.name}: DBus service not found; docker config may "
+                "be missing `-v /run/dbus:/run/dbus:ro`: {ex}"
+            ) from ex
+        raise ScannerStartError(
+            f"{self.name}: DBus service not found; make sure the DBus socket "
+            f"is available to Home Assistant: {ex}"
+        ) from ex
+
     async def _async_start(self) -> None:
         """Start bluetooth scanner under the lock."""
         for attempt in range(START_ATTEMPTS):
@@ -222,45 +263,11 @@ class HaScanner(BaseHaScanner):
                 async with asyncio.timeout(START_TIMEOUT):
                     await self.scanner.start()  # type: ignore[no-untyped-call]
             except InvalidMessageError as ex:
-                _LOGGER.debug(
-                    "%s: Invalid DBus message received: %s",
-                    self.name,
-                    ex,
-                    exc_info=True,
-                )
-                raise ScannerStartError(
-                    f"{self.name}: Invalid DBus message received: {ex}; "
-                    "try restarting `dbus`"
-                ) from ex
+                self._handel_invalid_message_error(ex)
             except BrokenPipeError as ex:
-                _LOGGER.debug(
-                    "%s: DBus connection broken: %s", self.name, ex, exc_info=True
-                )
-                if is_docker_env():
-                    raise ScannerStartError(
-                        f"{self.name}: DBus connection broken: {ex}; try restarting "
-                        "`bluetooth`, `dbus`, and finally the docker container"
-                    ) from ex
-                raise ScannerStartError(
-                    f"{self.name}: DBus connection broken: {ex}; try restarting "
-                    "`bluetooth` and `dbus`"
-                ) from ex
+                self._broken_pipe_error(ex)
             except FileNotFoundError as ex:
-                _LOGGER.debug(
-                    "%s: FileNotFoundError while starting bluetooth: %s",
-                    self.name,
-                    ex,
-                    exc_info=True,
-                )
-                if is_docker_env():
-                    raise ScannerStartError(
-                        f"{self.name}: DBus service not found; docker config may "
-                        "be missing `-v /run/dbus:/run/dbus:ro`: {ex}"
-                    ) from ex
-                raise ScannerStartError(
-                    f"{self.name}: DBus service not found; make sure the DBus socket "
-                    f"is available to Home Assistant: {ex}"
-                ) from ex
+                self._file_not_found_error(ex)
             except asyncio.TimeoutError as ex:
                 if attempt == 0:
                     await self._async_reset_adapter()
@@ -305,7 +312,6 @@ class HaScanner(BaseHaScanner):
                 raise ScannerStartError(
                     f"{self.name}: Failed to start Bluetooth: {ex}"
                 ) from ex
-
             # Everything is fine, break out of the loop
             break
 
