@@ -281,7 +281,7 @@ class ISYBacklightNumberEntity(ISYAuxControlEntity, RestoreNumber):
     @callback
     def async_on_memory_write(self, event: NodeChangedEvent, key: str) -> None:
         """Handle a memory write event from the ISY Node."""
-        if not (BACKLIGHT_MEMORY_FILTER.items() <= event.event_info.items()):
+        if BACKLIGHT_MEMORY_FILTER.items() > event.event_info.items():
             return  # This was not a backlight event
         value = ranged_value_to_percentage((0, 127), event.event_info["value"])
         if value == self._attr_native_value:
