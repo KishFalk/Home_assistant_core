@@ -28,6 +28,9 @@
       },
       "upload": {
         "name": "Upload"
+      },
+      "funny_rating": {
+        "name": "Funny rating"
       }
     }
   }

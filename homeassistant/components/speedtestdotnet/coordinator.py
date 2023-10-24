@@ -69,7 +69,39 @@ class SpeedTestDataCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         )
         self.api.download()
         self.api.upload()
-        return cast(dict[str, Any], self.api.results.dict())
+        result_dict = cast(dict[str, Any], self.api.results.dict())
+        result_dict["funny_rating"] = self.generate_funny_rating(
+            round(result_dict["download"] / 10**6, 2),
+            result_dict["ping"],
+        )
+        return result_dict
+
+    def generate_funny_rating(self, download: float, ping: float) -> str:
+        """Generate a funny rating based on download speed."""
+
+        funny_rating = ""
+        if ping > 200:
+            funny_rating = "Every online shooter's worst nightmare."
+        elif download < 1:
+            funny_rating = "Literal potato speeds."
+        elif download < 10:
+            funny_rating = "Kinda trashy."
+        elif download < 50:
+            funny_rating = "Granny dial-up internet."
+        elif download < 100:
+            funny_rating = "Nothing special, really"
+        elif download < 250:
+            funny_rating = "Just above average. Bet you feel special."
+        elif download < 500:
+            funny_rating = "You're probably paying too much."
+        elif download < 750:
+            funny_rating = "Is it bring your HomeAssistant to work day?"
+        elif download <= 1000:
+            funny_rating = "Dude. Stop."
+        elif download > 1000:
+            funny_rating = "Absolutely God-tier."
+
+        return funny_rating
 
     async def _async_update_data(self) -> dict[str, Any]:
         """Update Speedtest data."""

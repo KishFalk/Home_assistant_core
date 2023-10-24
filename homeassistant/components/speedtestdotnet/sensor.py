@@ -64,6 +64,11 @@ SENSOR_TYPES: tuple[SpeedtestSensorEntityDescription, ...] = (
         device_class=SensorDeviceClass.DATA_RATE,
         value=lambda value: round(value / 10**6, 2),
     ),
+    SpeedtestSensorEntityDescription(
+        key="funny_rating",
+        translation_key="funny_rating",
+        value=lambda value: value,
+    ),
 )
 
 
