@@ -127,15 +127,3 @@ async def test_update(
     await notif.create(hass, MAX_STATES["upload"], MAX_STATES["upload"])
 
     assert await notif.update() is True
-    # assert await notif.update() == MOCK_STATES[0]["download"]
-
-    # real.update = MagicMock(name="update")
-    # real.update(None)
-    # real.update.return_value = "Test"
-    # result = real.update.assert_called()
-
-    # MagicMock.attach_mock()
-    # MagicMock._mock_add_spec()
-    # MagicMock.configure_mock(real.update, {'notif.update.return_value': 50} )
-    # MagicMock.reset_mock()
-    # assert result == None
