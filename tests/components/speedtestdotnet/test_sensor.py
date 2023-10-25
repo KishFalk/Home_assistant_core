@@ -23,7 +23,7 @@ async def test_speedtestdotnet_sensors(
     await hass.config_entries.async_setup(entry.entry_id)
     await hass.async_block_till_done()
 
-    assert len(hass.states.async_entity_ids(SENSOR_DOMAIN)) == 4
+    assert len(hass.states.async_entity_ids(SENSOR_DOMAIN)) == 6
 
     sensor = hass.states.get("sensor.speedtest_ping")
     assert sensor
