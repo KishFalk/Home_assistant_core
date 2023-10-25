@@ -12,7 +12,7 @@ from homeassistant.components.sensor import (
     SensorStateClass,
 )
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import UnitOfDataRate, UnitOfTime
+from homeassistant.const import PERCENTAGE, UnitOfDataRate, UnitOfTime
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.device_registry import DeviceEntryType, DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
@@ -63,6 +63,18 @@ SENSOR_TYPES: tuple[SpeedtestSensorEntityDescription, ...] = (
         state_class=SensorStateClass.MEASUREMENT,
         device_class=SensorDeviceClass.DATA_RATE,
         value=lambda value: round(value / 10**6, 2),
+    ),
+    SpeedtestSensorEntityDescription(
+        key="download_percentage",
+        translation_key="download_percentage",
+        native_unit_of_measurement=PERCENTAGE,
+        value=lambda value: value if value is not None else None,
+    ),
+    SpeedtestSensorEntityDescription(
+        key="upload_percentage",
+        translation_key="upload_percentage",
+        native_unit_of_measurement=PERCENTAGE,
+        value=lambda value: value if value is not None else None,
     ),
 )
 

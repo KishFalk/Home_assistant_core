@@ -7,6 +7,9 @@ DOMAIN: Final = "speedtestdotnet"
 
 CONF_SERVER_NAME: Final = "server_name"
 CONF_SERVER_ID: Final = "server_id"
+CONF_PAID_DOWNLOAD_SPEED: Final = "paid_download_speed"
+CONF_PAID_UPLOAD_SPEED: Final = "paid_upload_speed"
+
 
 ATTR_BYTES_RECEIVED: Final = "bytes_received"
 ATTR_BYTES_SENT: Final = "bytes_sent"

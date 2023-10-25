@@ -4,6 +4,8 @@ from unittest.mock import MagicMock
 from homeassistant import config_entries
 from homeassistant.components import speedtestdotnet
 from homeassistant.components.speedtestdotnet.const import (
+    CONF_PAID_DOWNLOAD_SPEED,
+    CONF_PAID_UPLOAD_SPEED,
     CONF_SERVER_ID,
     CONF_SERVER_NAME,
     DOMAIN,
@@ -22,8 +24,10 @@ async def test_flow_works(hass: HomeAssistant) -> None:
     assert result["type"] == FlowResultType.FORM
     assert result["step_id"] == "user"
 
+    user_input = {CONF_PAID_DOWNLOAD_SPEED: 50.0, CONF_PAID_UPLOAD_SPEED: 30.0}
+
     result = await hass.config_entries.flow.async_configure(
-        result["flow_id"], user_input={}
+        result["flow_id"], user_input=user_input
     )
     assert result["type"] == FlowResultType.CREATE_ENTRY
 
@@ -87,3 +91,35 @@ async def test_integration_already_configured(hass: HomeAssistant) -> None:
     )
     assert result["type"] == FlowResultType.ABORT
     assert result["reason"] == "single_instance_allowed"
+
+
+async def test_valid_paid_speed_input(hass: HomeAssistant) -> None:
+    """Test valid paid download and upload speed input."""
+    result = await hass.config_entries.flow.async_init(
+        speedtestdotnet.DOMAIN, context={"source": config_entries.SOURCE_USER}
+    )
+    assert result["type"] == FlowResultType.FORM
+    assert result["step_id"] == "user"
+
+    user_input = {CONF_PAID_DOWNLOAD_SPEED: 50.0, CONF_PAID_UPLOAD_SPEED: 30.0}
+
+    result = await hass.config_entries.flow.async_configure(
+        result["flow_id"], user_input=user_input
+    )
+    assert result["type"] == FlowResultType.CREATE_ENTRY
+
+
+async def test_default_paid_speed_input(hass: HomeAssistant) -> None:
+    """Test default paid download and upload speed input."""
+    result = await hass.config_entries.flow.async_init(
+        speedtestdotnet.DOMAIN, context={"source": config_entries.SOURCE_USER}
+    )
+    assert result["type"] == FlowResultType.FORM
+    assert result["step_id"] == "user"
+
+    user_input = None
+
+    result = await hass.config_entries.flow.async_configure(
+        result["flow_id"], user_input=user_input
+    )
+    assert result["type"] == FlowResultType.FORM

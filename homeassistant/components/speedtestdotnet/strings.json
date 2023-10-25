@@ -28,6 +28,12 @@
       },
       "upload": {
         "name": "Upload"
+      },
+      "download_percentage": {
+        "name": "Download percentage"
+      },
+      "upload_percentage": {
+        "name": "Upload percentage"
       }
     }
   }

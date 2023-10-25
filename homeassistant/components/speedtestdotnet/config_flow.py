@@ -10,6 +10,8 @@ from homeassistant.core import callback
 from homeassistant.data_entry_flow import FlowResult
 
 from .const import (
+    CONF_PAID_DOWNLOAD_SPEED,
+    CONF_PAID_UPLOAD_SPEED,
     CONF_SERVER_ID,
     CONF_SERVER_NAME,
     DEFAULT_NAME,
@@ -39,7 +41,19 @@ class SpeedTestFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             return self.async_abort(reason="single_instance_allowed")
 
         if user_input is None:
-            return self.async_show_form(step_id="user")
+            return self.async_show_form(
+                step_id="user",
+                data_schema=vol.Schema(
+                    {
+                        vol.Required(CONF_PAID_DOWNLOAD_SPEED): vol.All(
+                            vol.Coerce(float), vol.Range(min=1)
+                        ),
+                        vol.Required(CONF_PAID_UPLOAD_SPEED): vol.All(
+                            vol.Coerce(float), vol.Range(min=1)
+                        ),
+                    }
+                ),
+            )
 
         return self.async_create_entry(title=DEFAULT_NAME, data=user_input)
 

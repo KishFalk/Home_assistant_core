@@ -10,7 +10,14 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
-from .const import CONF_SERVER_ID, DEFAULT_SCAN_INTERVAL, DEFAULT_SERVER, DOMAIN
+from .const import (
+    CONF_PAID_DOWNLOAD_SPEED,
+    CONF_PAID_UPLOAD_SPEED,
+    CONF_SERVER_ID,
+    DEFAULT_SCAN_INTERVAL,
+    DEFAULT_SERVER,
+    DOMAIN,
+)
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -69,7 +76,15 @@ class SpeedTestDataCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         )
         self.api.download()
         self.api.upload()
-        return cast(dict[str, Any], self.api.results.dict())
+
+        result_dict = cast(dict[str, Any], self.api.results.dict())
+        result_dict["download_percentage"] = self.calc_download_percentage(
+            round(result_dict["download"] / 10**6, 2)
+        )
+        result_dict["upload_percentage"] = self.calc_upload_percentage(
+            round(result_dict["upload"] / 10**6, 2)
+        )
+        return result_dict
 
     async def _async_update_data(self) -> dict[str, Any]:
         """Update Speedtest data."""
@@ -79,3 +94,29 @@ class SpeedTestDataCoordinator(DataUpdateCoordinator[dict[str, Any]]):
             raise UpdateFailed("Selected server is not found.") from err
         except speedtest.SpeedtestException as err:
             raise UpdateFailed(err) from err
+
+    def calc_download_percentage(self, actual_download_speed: float) -> Any:
+        """Calculate the download percentage between the paid and actual download speed."""
+        paid_download_speed = self.config_entry.data.get(CONF_PAID_DOWNLOAD_SPEED)
+        if paid_download_speed is not None:
+            return (actual_download_speed / paid_download_speed) * 100
+        return None
+
+    def calc_upload_percentage(self, actual_upload_speed: float) -> Any:
+        """Calculate the upload percentage between the paid and actual upload speed."""
+        paid_upload_speed = self.config_entry.data.get(CONF_PAID_UPLOAD_SPEED)
+        if paid_upload_speed is not None:
+            return (actual_upload_speed / paid_upload_speed) * 100
+        return None
+
+    def calc_download_percentage_test(
+        self, actual_download_speed: float, paid_download_speed: float
+    ) -> float:
+        """Test the calculation of the download percentage between the paid and actual download speed."""
+        return (actual_download_speed / paid_download_speed) * 100
+
+    def calc_upload_percentage_test(
+        self, actual_upload_speed: float, paid_upload_speed: float
+    ) -> float:
+        """Test the calculation of the upload percentage between the paid and actual download speed."""
+        return (actual_upload_speed / paid_upload_speed) * 100
