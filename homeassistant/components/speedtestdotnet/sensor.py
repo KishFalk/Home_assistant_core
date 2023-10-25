@@ -5,6 +5,8 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Any, cast
 
+from notifications import SpeedtestdotnetNotifications
+
 from homeassistant.components.sensor import (
     SensorEntity,
     SensorEntityDescription,
@@ -75,6 +77,7 @@ async def async_setup_entry(
         SpeedtestSensor(speedtest_coordinator, description)
         for description in SENSOR_TYPES
     )
+    await SpeedtestdotnetNotifications.create(hass, 100, 100)
 
 
 # pylint: disable-next=hass-invalid-inheritance # needs fixing
