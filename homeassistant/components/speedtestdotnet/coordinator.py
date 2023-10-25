@@ -71,14 +71,13 @@ class SpeedTestDataCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         self.api.upload()
         result_dict = cast(dict[str, Any], self.api.results.dict())
         result_dict["funny_rating"] = self.generate_funny_rating(
-            round(result_dict["download"] / 10**6, 2),
-            result_dict["ping"],
+            float(round(result_dict["download"] / 10**6, 2)),
+            float(result_dict["ping"]),
         )
         return result_dict
 
     def generate_funny_rating(self, download: float, ping: float) -> str:
         """Generate a funny rating based on download speed."""
-
         funny_rating = ""
         if ping > 200:
             funny_rating = "Every online shooter's worst nightmare."
