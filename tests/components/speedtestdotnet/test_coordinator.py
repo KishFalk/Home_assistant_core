@@ -1,9 +1,7 @@
 """Tests for SpeedTest coordinator."""
 from unittest.mock import Mock
-
-from homeassistant.components.speedtestdotnet.coordinator import (
-    SpeedTestDataCoordinator,
-)
+import pytest
+from homeassistant.components.speedtestdotnet import SpeedTestDataCoordinator
 from homeassistant.core import HomeAssistant
 
 
@@ -37,3 +35,21 @@ async def test_calc_upload_percentage() -> None:
         actual_download_speed, paid_download_speed
     )
     assert result == expected_percentage
+
+@pytest.mark.parametrize(
+    ("download", "ping", "expected_result"),
+    [
+        (0.5, 10, "Literal potato speeds."),
+        (5, 10, "Kinda trashy."),
+        (25, 10, "Granny dial-up internet."),
+        (75, 10, "Nothing special, really"),
+        (150, 10, "Just above average. Bet you feel special."),
+        (100, 250, "Every online shooter's worst nightmare."),
+    ],
+)
+def test_generate_funny_rating(download, ping, expected_result) -> None:
+    """Test the generate_funny_rating function."""
+    assert (
+        SpeedTestDataCoordinator.generate_funny_rating(None, download, ping)
+        == expected_result
+    )

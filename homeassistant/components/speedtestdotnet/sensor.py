@@ -31,6 +31,7 @@ from .const import (
     ICON,
 )
 from .coordinator import SpeedTestDataCoordinator
+from .notifications import SpeedtestdotnetNotifications
 
 
 @dataclass
@@ -76,6 +77,11 @@ SENSOR_TYPES: tuple[SpeedtestSensorEntityDescription, ...] = (
         native_unit_of_measurement=PERCENTAGE,
         value=lambda value: value if value is not None else None,
     ),
+    SpeedtestSensorEntityDescription(
+        key="funny_rating",
+        translation_key="funny_rating",
+        value=lambda value: value,
+    ),
 )
 
 
@@ -90,6 +96,7 @@ async def async_setup_entry(
         SpeedtestSensor(speedtest_coordinator, description)
         for description in SENSOR_TYPES
     )
+    await SpeedtestdotnetNotifications.create(hass, 100, 100)
 
 
 class SpeedtestSensor(CoordinatorEntity[SpeedTestDataCoordinator], SensorEntity):

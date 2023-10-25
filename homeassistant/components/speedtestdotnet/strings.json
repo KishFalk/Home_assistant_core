@@ -34,6 +34,9 @@
       },
       "upload_percentage": {
         "name": "Upload percentage"
+      },
+      "funny_rating": {
+        "name": "Funny rating"
       }
     }
   }

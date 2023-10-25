@@ -35,6 +35,7 @@ MOCK_RESULTS = {
     "download": 1024000,
     "upload": 1024000,
     "ping": 18.465,
+    "funny_rating": "Kinda trashy.",
     "server": {
         "url": "http://test_server:8080/speedtest/upload.php",
         "lat": "00.0000",
@@ -52,4 +53,9 @@ MOCK_RESULTS = {
     "share": None,
 }
 
-MOCK_STATES = {"ping": "18", "download": "1.02", "upload": "1.02"}
+MOCK_STATES = {
+    "ping": "18",
+    "download": "1.02",
+    "upload": "1.02",
+    "funny_rating": "Kinda trashy.",
+}
