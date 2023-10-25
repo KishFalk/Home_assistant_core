@@ -18,6 +18,7 @@ from .const import (
     DEFAULT_SERVER,
     DOMAIN,
 )
+from .notifications import SpeedtestdotnetNotifications
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -84,7 +85,6 @@ class SpeedTestDataCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         result_dict["upload_percentage"] = self.calc_upload_percentage(
             round(result_dict["upload"] / 10**6, 2)
         )
-        result_dict = cast(dict[str, Any], self.api.results.dict())
         result_dict["funny_rating"] = self.generate_funny_rating(
             float(round(result_dict["download"] / 10**6, 2)),
             float(result_dict["ping"]),
@@ -119,6 +119,14 @@ class SpeedTestDataCoordinator(DataUpdateCoordinator[dict[str, Any]]):
 
     async def _async_update_data(self) -> dict[str, Any]:
         """Update Speedtest data."""
+        try:
+            paid_download = self.config_entry.data.get(CONF_PAID_DOWNLOAD_SPEED)
+            paid_upload = self.config_entry.data.get(CONF_PAID_UPLOAD_SPEED)
+            notif = SpeedtestdotnetNotifications()
+            notif.create(self.hass, int(str(paid_download)), int(str(paid_upload)))
+            await notif.update(self.hass)
+        except (AttributeError, KeyError, ValueError):
+            pass
         try:
             return await self.hass.async_add_executor_job(self.update_data)
         except speedtest.NoMatchedServers as err:

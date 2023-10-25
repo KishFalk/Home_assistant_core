@@ -31,7 +31,6 @@ from .const import (
     ICON,
 )
 from .coordinator import SpeedTestDataCoordinator
-from .notifications import SpeedtestdotnetNotifications
 
 
 @dataclass
@@ -47,7 +46,6 @@ SENSOR_TYPES: tuple[SpeedtestSensorEntityDescription, ...] = (
         translation_key="ping",
         native_unit_of_measurement=UnitOfTime.MILLISECONDS,
         state_class=SensorStateClass.MEASUREMENT,
-        device_class=SensorDeviceClass.DURATION,
     ),
     SpeedtestSensorEntityDescription(
         key="download",
@@ -96,7 +94,6 @@ async def async_setup_entry(
         SpeedtestSensor(speedtest_coordinator, description)
         for description in SENSOR_TYPES
     )
-    await SpeedtestdotnetNotifications.create(hass, 100, 100)
 
 
 class SpeedtestSensor(CoordinatorEntity[SpeedTestDataCoordinator], SensorEntity):
