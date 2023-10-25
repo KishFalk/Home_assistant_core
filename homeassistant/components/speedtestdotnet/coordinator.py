@@ -123,7 +123,9 @@ class SpeedTestDataCoordinator(DataUpdateCoordinator[dict[str, Any]]):
             paid_download = self.config_entry.data.get(CONF_PAID_DOWNLOAD_SPEED)
             paid_upload = self.config_entry.data.get(CONF_PAID_UPLOAD_SPEED)
             notif = SpeedtestdotnetNotifications()
-            notif.create(self.hass, int(str(paid_download)), int(str(paid_upload)))
+            notif.create(
+                self.hass, int(float(str(paid_download))), int(float(str(paid_upload)))
+            )
             await notif.update(self.hass)
         except (AttributeError, KeyError, ValueError):
             pass
