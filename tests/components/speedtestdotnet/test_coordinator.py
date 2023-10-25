@@ -1,6 +1,8 @@
 """Tests for SpeedTest coordinator."""
 from unittest.mock import Mock
+
 import pytest
+
 from homeassistant.components.speedtestdotnet import SpeedTestDataCoordinator
 from homeassistant.core import HomeAssistant
 
@@ -35,6 +37,7 @@ async def test_calc_upload_percentage() -> None:
         actual_download_speed, paid_download_speed
     )
     assert result == expected_percentage
+
 
 @pytest.mark.parametrize(
     ("download", "ping", "expected_result"),
