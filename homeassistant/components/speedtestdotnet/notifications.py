@@ -94,54 +94,52 @@ class SpeedtestdotnetNotifications:
         for sensor in self.sensors:
             current_data = data[sensor["name"]]
             # Check if the sensor data is within the acceptable threshold.
-            if self.compare(current_data["value"], sensor):
+            if (
+                self.compare(current_data["value"], sensor)
+                and current_data["count"] > 0
+            ):
                 result[sensor["name"]] = True
             else:
                 result[sensor["name"]] = False
 
         return result
 
-    def state_change(self, hass: HomeAssistant) -> None:
-        """Track when sensor states have changed to initiate a new evaluation.
-
-        TODO: Possible changes:
-        1. update function is called from sensor.py
-        2. Updates are run on a 24 hr interval instead.
-        """
-        # event.async_track_time_change(hass, self.update(), 14, 27, None)
-
     def send_notification(self, title: str, message: str) -> None:
         """Send a notification using the REST API to the home assistant UI."""
         persistent_notification.create(self.hass, message=message, title=title)
 
+    async def get_sensor_history(self, period_days: int, entity_id: str) -> list:
+        """Get history of sensor states."""
+        # Get the start date as a datetime object
+        start_date = dt.datetime.now(dt.UTC) - timedelta(days=period_days)
+        response = await self.hass.async_add_executor_job(
+            history.state_changes_during_period,
+            self.hass,
+            start_date,
+            None,
+            entity_id,
+            True,
+        )
+        return response[entity_id]
+
     async def update(self) -> bool:
         """Update and validate sensor averages."""
-        # Get sensor data from the past month
-        thirty_days_ago = dt.datetime.now(dt.UTC) - timedelta(days=30)
         result = {}
         averages = {}
-
         # Get average values from each sensor
         for sensor in self.sensors:
-            response = await self.hass.async_add_executor_job(
-                history.state_changes_during_period,
-                self.hass,
-                thirty_days_ago,
-                None,
-                sensor["id"],
-                True,
-            )
-            averages[sensor["name"]] = self.average(response[str(sensor["id"])])
+            response = await self.get_sensor_history(30, str(sensor["id"]))
+            averages[sensor["name"]] = self.average(response)
 
         # Validate average values
-        result = self.validate(averages)
-
-        # Check if any sensor failed to meet the requirement and send a notification to the user.
-        failed_sensors = [x for x in self.sensors if result[x["name"]] is False]
-        if len(failed_sensors) > 0:
-            failed_sensors_str = ", ".join([str(x["name"]) for x in failed_sensors])
-            title = "Internet speed is slower than expected."
-            message = f"Speedtest.net has detected that the internet speed does not meet the minimum acceptable requirement this month. Affected sensor(s) is/are {failed_sensors_str}.\n\nPlease find more information about how to improve connection speeds on our knowledgebase (https://www.speedtest.net/about/knowledge). \n\nIf you get this notification often, try changing the minimum threshold values in the integration settings."
-            self.send_notification(title, message)
+        if len(averages) != 0:
+            result = self.validate(averages)
+            # Check if any sensor failed to meet the requirement and send a notification to the user.
+            failed_sensors = [x for x in self.sensors if result[x["name"]] is False]
+            if len(failed_sensors) > 0:
+                failed_sensors_str = ", ".join([str(x["name"]) for x in failed_sensors])
+                title = "Internet speed is slower than expected."
+                message = f"Speedtest.net has detected that the internet speed does not meet the minimum acceptable requirement this month. Affected sensor(s) is/are {failed_sensors_str}.\n\nPlease find more information about how to improve connection speeds on our knowledgebase (https://www.speedtest.net/about/knowledge). \n\nIf you get this notification often, try changing the minimum threshold values in the integration settings."
+                self.send_notification(title, message)
 
         return True
