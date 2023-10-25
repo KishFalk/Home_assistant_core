@@ -31,6 +31,7 @@ from .const import (
     ICON,
 )
 from .coordinator import SpeedTestDataCoordinator
+from .notifications import SpeedtestdotnetNotifications
 
 
 @dataclass
@@ -78,6 +79,7 @@ async def async_setup_entry(
         SpeedtestSensor(speedtest_coordinator, description)
         for description in SENSOR_TYPES
     )
+    await SpeedtestdotnetNotifications.create(hass, 100, 100)
 
 
 class SpeedtestSensor(CoordinatorEntity[SpeedTestDataCoordinator], SensorEntity):

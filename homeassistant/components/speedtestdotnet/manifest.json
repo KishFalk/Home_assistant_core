@@ -1,6 +1,7 @@
 {
   "domain": "speedtestdotnet",
   "name": "Speedtest.net",
+  "after_dependencies": ["recorder"],
   "codeowners": ["@rohankapoorcom", "@engrbm87"],
   "config_flow": true,
   "documentation": "https://www.home-assistant.io/integrations/speedtestdotnet",
