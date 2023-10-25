@@ -3,6 +3,7 @@
   "name": "Speedtest.net",
   "codeowners": ["@rohankapoorcom", "@engrbm87"],
   "config_flow": true,
+  "dependencies": ["recorder"],
   "documentation": "https://www.home-assistant.io/integrations/speedtestdotnet",
   "iot_class": "cloud_polling",
   "requirements": ["speedtest-cli==2.1.3"]
