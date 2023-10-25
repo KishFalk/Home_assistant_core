@@ -5,8 +5,6 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Any, cast
 
-from notifications import SpeedtestdotnetNotifications
-
 from homeassistant.components.sensor import (
     SensorEntity,
     SensorEntityDescription,
@@ -33,6 +31,7 @@ from .const import (
     ICON,
 )
 from .coordinator import SpeedTestDataCoordinator
+from .notifications import SpeedtestdotnetNotifications
 
 
 @dataclass

@@ -6,11 +6,7 @@ from homeassistant.components import persistent_notification
 from homeassistant.components.recorder import history
 from homeassistant.core import HomeAssistant
 
-# from homeassistant.helpers import event
 
-
-# await SpeedtestdotnetNotifications.create(hass, 100, 100)
-# from notifications import SpeedtestdotnetNotifications
 class SpeedtestdotnetNotifications:
     """Class updating average sensor states."""
 
@@ -41,6 +37,9 @@ class SpeedtestdotnetNotifications:
         },
     ]
 
+    def __init__(self) -> None:
+        """Initialise the SpeedtestdotnetNotifications class."""
+
     @classmethod
     async def create(
         cls,
@@ -53,7 +52,6 @@ class SpeedtestdotnetNotifications:
         self.hass = hass
         self.sensors[0]["max_value"] = paid_download
         self.sensors[2]["max_value"] = paid_upload
-        await self.update()
 
     def average(self, data: list) -> dict:
         """Calculate averges of each sensor's data.
@@ -94,7 +92,7 @@ class SpeedtestdotnetNotifications:
         result = {}
 
         for sensor in self.sensors:
-            current_data = data[sensor["id"]]
+            current_data = data[sensor["name"]]
             # Check if the sensor data is within the acceptable threshold.
             if self.compare(current_data["value"], sensor):
                 result[sensor["name"]] = True
@@ -133,7 +131,7 @@ class SpeedtestdotnetNotifications:
                 sensor["id"],
                 True,
             )
-            averages[sensor["id"]] = self.average(response[str(sensor["id"])])
+            averages[sensor["name"]] = self.average(response[str(sensor["id"])])
 
         # Validate average values
         result = self.validate(averages)
