@@ -89,7 +89,7 @@ MOCK_COMPARE_RESULTS = [False, True, False, True]
 async def test_history_average(hass: HomeAssistant) -> None:
     """Test averaging history states."""
     notif = n.SpeedtestdotnetNotifications()
-    await notif.create(hass, MAX_STATES["download"], MAX_STATES["upload"])
+    notif.create(hass, MAX_STATES["download"], MAX_STATES["upload"])
     for i, val in enumerate(MOCK_STATES):
         for sensor_name in sensor_names:
             result = notif.average(val[sensor_name])
@@ -99,7 +99,7 @@ async def test_history_average(hass: HomeAssistant) -> None:
 async def test_validate(hass: HomeAssistant) -> None:
     """Test validating averages."""
     notif = n.SpeedtestdotnetNotifications()
-    await notif.create(hass, MAX_STATES["download"], MAX_STATES["upload"])
+    notif.create(hass, MAX_STATES["download"], MAX_STATES["upload"])
     for i, val in enumerate(MOCK_AVG_RESULTS):
         result = notif.validate(val)
         assert result == MOCK_VALIDATE_RESULTS[i]
@@ -108,7 +108,7 @@ async def test_validate(hass: HomeAssistant) -> None:
 async def test_compare(hass: HomeAssistant) -> None:
     """Test the compare function for state thresholds."""
     notif = n.SpeedtestdotnetNotifications()
-    await notif.create(hass, MAX_STATES["download"], MAX_STATES["upload"])
+    notif.create(hass, MAX_STATES["download"], MAX_STATES["upload"])
 
     for i, val in enumerate(MOCK_COMPARE):
         result = notif.compare(val["value"], val)
@@ -124,6 +124,6 @@ async def test_update(
     mock_history.get_sensor_history.side_effect = MOCK_STATES
     mock_history.mock_send_notification.return_value = None
     notif = n.SpeedtestdotnetNotifications()
-    await notif.create(hass, MAX_STATES["upload"], MAX_STATES["upload"])
+    notif.create(hass, MAX_STATES["upload"], MAX_STATES["upload"])
 
-    assert await notif.update() is True
+    assert await notif.update(hass) is True

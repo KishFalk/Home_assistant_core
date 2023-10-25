@@ -41,7 +41,7 @@ class SpeedtestdotnetNotifications:
         """Initialise the SpeedtestdotnetNotifications class."""
 
     @classmethod
-    async def create(
+    def create(
         cls,
         hass: HomeAssistant,
         paid_download: int,
@@ -104,17 +104,19 @@ class SpeedtestdotnetNotifications:
 
         return result
 
-    def send_notification(self, title: str, message: str) -> None:
+    def send_notification(self, hass: HomeAssistant, title: str, message: str) -> None:
         """Send a notification using the REST API to the home assistant UI."""
-        persistent_notification.create(self.hass, message=message, title=title)
+        persistent_notification.create(hass, message=message, title=title)
 
-    async def get_sensor_history(self, period_days: int, entity_id: str) -> list:
+    async def get_sensor_history(
+        self, hass: HomeAssistant, period_days: int, entity_id: str
+    ) -> list:
         """Get history of sensor states."""
         # Get the start date as a datetime object
         start_date = dt.datetime.now(dt.UTC) - timedelta(days=period_days)
-        response = await self.hass.async_add_executor_job(
+        response = await hass.async_add_executor_job(
             history.state_changes_during_period,
-            self.hass,
+            hass,
             start_date,
             None,
             entity_id,
@@ -122,13 +124,13 @@ class SpeedtestdotnetNotifications:
         )
         return response[entity_id]
 
-    async def update(self) -> bool:
+    async def update(self, hass: HomeAssistant) -> bool:
         """Update and validate sensor averages."""
         result = {}
         averages = {}
         # Get average values from each sensor
         for sensor in self.sensors:
-            response = await self.get_sensor_history(30, str(sensor["id"]))
+            response = await self.get_sensor_history(hass, 30, str(sensor["id"]))
             averages[sensor["name"]] = self.average(response)
 
         # Validate average values
@@ -140,6 +142,6 @@ class SpeedtestdotnetNotifications:
                 failed_sensors_str = ", ".join([str(x["name"]) for x in failed_sensors])
                 title = "Internet speed is slower than expected."
                 message = f"Speedtest.net has detected that the internet speed does not meet the minimum acceptable requirement this month. Affected sensor(s) is/are {failed_sensors_str}.\n\nPlease find more information about how to improve connection speeds on our knowledgebase (https://www.speedtest.net/about/knowledge). \n\nIf you get this notification often, try changing the minimum threshold values in the integration settings."
-                self.send_notification(title, message)
+                self.send_notification(hass, title, message)
 
         return True
